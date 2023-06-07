@@ -17,6 +17,10 @@ input.onButtonPressed(Button.A, function () {
 timeanddate.onMinuteChanged(function () {
     radio.sendNumber(0)
 })
+radio.onReceivedString(function (receivedString) {
+    WindDir = receivedString
+    kitronik_air_quality.show("" + receivedString, 6, kitronik_air_quality.ShowAlign.Right)
+})
 radio.onReceivedValue(function (name, value) {
     kitronik_air_quality.show("Sta1", 1, kitronik_air_quality.ShowAlign.Left)
     kitronik_air_quality.show(timeanddate.date(timeanddate.DateFormat.MD), 1, kitronik_air_quality.ShowAlign.Right)
@@ -43,13 +47,12 @@ function showStationData () {
     kitronik_air_quality.show("RH: " + humidity + "%", 3, kitronik_air_quality.ShowAlign.Left)
     kitronik_air_quality.show("Dewpoint:" + dewPoint + "°C", 4, kitronik_air_quality.ShowAlign.Left)
     kitronik_air_quality.show("Pressure: " + pressure + " hPa", 5, kitronik_air_quality.ShowAlign.Left)
-    kitronik_air_quality.show("Wind:" + windSpd + " mph", 6, kitronik_air_quality.ShowAlign.Left)
+    kitronik_air_quality.show("Wind:" + windSpd + " mph   ", 6, kitronik_air_quality.ShowAlign.Left)
     kitronik_air_quality.show("Rain: " + rain + " in", 7, kitronik_air_quality.ShowAlign.Left)
     kitronik_air_quality.show("UVA: " + uva + " nm", 8, kitronik_air_quality.ShowAlign.Left)
 }
 // on logo press send CSV serial of outside and inside sensor data
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    let WindDir = 0
     serial.writeLine("" + timeanddate.dateTime() + "," + tempC + "," + humidity + "," + dewPoint + "," + pressure + "," + windSpd + "," + WindDir + "," + rain + "," + uva + "," + kitronik_air_quality.getAirQualityPercent() + "." + kitronik_air_quality.getAirQualityScore() + "," + kitronik_air_quality.readeCO2())
 })
 input.onButtonPressed(Button.AB, function () {
@@ -66,7 +69,8 @@ let pressure = 0
 let dewPoint = 0
 let humidity = 0
 let tempC = 0
+let WindDir = ""
 radio.setGroup(1)
 timeanddate.setDate(6, 7, 2023)
-timeanddate.set24HourTime(13, 12, 0)
+timeanddate.set24HourTime(14, 36, 0)
 basic.showIcon(IconNames.SmallSquare)
